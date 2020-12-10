@@ -124,3 +124,4 @@ RUN apt-get purge -y --auto-remove \
  && apt-get clean
 
 CMD ["python3"]
+RUN pip install -r behave selenium chromedriver-autoinstaller geckodriver-autoinstaller
