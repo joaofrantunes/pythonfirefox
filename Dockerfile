@@ -15,29 +15,7 @@ RUN apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends \
 		libbluetooth-dev \
 		tk-dev \
-		uuid-dev \
-		\
- && apt-get install -y --no-install-recommends --no-install-suggests \
-            ca-certificates \
- && update-ca-certificates \
-    \
- # Install tools for building
- && toolDeps=" \
-        curl bzip2 \
-    " \
- && apt-get install -y --no-install-recommends --no-install-suggests \
-            $toolDeps \
-	\
- # Install dependencies for Firefox
- && apt-get install -y --no-install-recommends --no-install-suggests \
-            `apt-cache depends firefox-esr | awk '/Depends:/{print$2}'` \
-            # additional 'firefox-esl' dependencies which is not in 'depends' list
-            libxt6 \
- # Download and install Firefox
- && curl -fL -o /tmp/firefox.tar.bz2 \
-         https://ftp.mozilla.org/pub/firefox/releases/${firefox_ver}/linux-x86_64/en-GB/firefox-${firefox_ver}.tar.bz2 \
- && tar -xjf /tmp/firefox.tar.bz2 -C /tmp/ \
- && mv /tmp/firefox /opt/firefox 
+		uuid-dev
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
 ENV PYTHON_VERSION 3.8.6
@@ -121,6 +99,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 RUN apt-get -y update
 RUN apt-get install -y google-chrome-stable
+RUN apt-get install -y firefox-esr
 
 # install chromedriver
 RUN apt-get install -yqq unzip
