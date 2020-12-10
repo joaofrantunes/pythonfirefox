@@ -113,15 +113,6 @@ RUN set -ex; \
 			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
-	
- # Cleanup unnecessary stuff
-RUN apt-get purge -y --auto-remove \
-                  -o APT::AutoRemove::RecommendsImportant=false \
-            $toolDeps \
- && rm -rf /var/lib/apt/lists/* \
-           /tmp/* \
- && apt-get autoclean \
- && apt-get clean
 
 CMD ["python3"]
 
@@ -138,3 +129,12 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
 # set display port to avoid crash
 ENV DISPLAY=:99
+
+ # Cleanup unnecessary stuff
+RUN apt-get purge -y --auto-remove \
+                  -o APT::AutoRemove::RecommendsImportant=false \
+            $toolDeps \
+ && rm -rf /var/lib/apt/lists/* \
+           /tmp/* \
+ && apt-get autoclean \
+ && apt-get clean
