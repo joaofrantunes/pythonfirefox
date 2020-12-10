@@ -37,14 +37,7 @@ RUN apt-get install -y --no-install-recommends \
  && curl -fL -o /tmp/firefox.tar.bz2 \
          https://ftp.mozilla.org/pub/firefox/releases/${firefox_ver}/linux-x86_64/en-GB/firefox-${firefox_ver}.tar.bz2 \
  && tar -xjf /tmp/firefox.tar.bz2 -C /tmp/ \
- && mv /tmp/firefox /opt/firefox \
- 
- # Cleanup unnecessary stuff
- && apt-get purge -y --auto-remove \
-                  -o APT::AutoRemove::RecommendsImportant=false \
-            $toolDeps \
- && rm -rf /var/lib/apt/lists/* \
-           /tmp/*
+ && mv /tmp/firefox /opt/firefox 
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
 ENV PYTHON_VERSION 3.8.6
@@ -120,5 +113,14 @@ RUN set -ex; \
 			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
+	
+ # Cleanup unnecessary stuff
+RUN apt-get purge -y --auto-remove \
+                  -o APT::AutoRemove::RecommendsImportant=false \
+            $toolDeps \
+ && rm -rf /var/lib/apt/lists/* \
+           /tmp/* \
+ && apt-get autoclean \
+ && apt-get clean
 
 CMD ["python3"]
